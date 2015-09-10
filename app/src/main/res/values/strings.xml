@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">LatestTV</string>
+    <string name="trending_shows_getshows_error">Something went wrong!</string>
+</resources>
