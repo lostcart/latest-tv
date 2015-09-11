@@ -1,6 +1,7 @@
 package apps.lost.latesttv.trending;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,8 +16,8 @@ import apps.lost.latesttv.R;
 import apps.lost.latesttv.shows.Show;
 import apps.lost.latesttv.shows.ShowAdapter;
 import apps.lost.latesttv.shows.ShowItemDecoration;
-import apps.lost.latesttv.trending.service.TrendingShowsInterface;
 import apps.lost.latesttv.trending.service.TrendingShowsManager;
+import apps.lost.latesttv.trending.service.TrendingShowsPresenter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -25,17 +26,18 @@ import butterknife.ButterKnife;
  *
  * @author luke
  */
-public class TrendingShowsFragment extends Fragment implements TrendingShowsInterface {
+public class TrendingShowsFragment extends Fragment implements TrendingShowsPresenter.View {
+    // How many columns should the recycler view use?
     private static final int GRID_COLUMNS = 2;
 
     @Bind(R.id.trending_shows_recyclerview)
     RecyclerView mRecyclerView;
 
     // TODO: Use dagger to inject this ?
-    private TrendingShowsManager mTrendingShowsManager;
+    private TrendingShowsPresenter mTrendingShowsPresenter;
 
     public TrendingShowsFragment() {
-        mTrendingShowsManager = new TrendingShowsManager(this);
+        mTrendingShowsPresenter = new TrendingShowsPresenter(this, new TrendingShowsManager());
     }
 
     @Override
@@ -47,22 +49,24 @@ public class TrendingShowsFragment extends Fragment implements TrendingShowsInte
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        // Setup recycler view settings
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), GRID_COLUMNS));
         mRecyclerView.addItemDecoration(new ShowItemDecoration(getActivity(), GRID_COLUMNS, R.dimen.spacing, true));
-
-        // Try and grab the data we need
-        mTrendingShowsManager.getShows();
     }
 
     @Override
-    public void gotShows(List<Show> shows) {
-        // TODO: hmmm
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mTrendingShowsPresenter.onViewAttached();
+    }
+
+    @Override
+    public void showShows(List<Show> shows) {
         mRecyclerView.setAdapter(new ShowAdapter(shows));
     }
 
     @Override
-    public void failed() {
-        //TODO: getContext() not working in this fragment??
+    public void showError() {
         Toast.makeText(getActivity(), R.string.trending_shows_getshows_error, Toast.LENGTH_LONG).show();
     }
 }
