@@ -12,12 +12,11 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import apps.lost.latesttv.LatestTVApplication;
 import apps.lost.latesttv.R;
 import apps.lost.latesttv.shows.Show;
 import apps.lost.latesttv.shows.ShowAdapter;
 import apps.lost.latesttv.shows.ShowItemDecoration;
-import apps.lost.latesttv.trending.service.TrendingShowsManager;
-import apps.lost.latesttv.trending.service.TrendingShowsPresenter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -33,15 +32,16 @@ public class TrendingShowsFragment extends Fragment implements TrendingShowsPres
     @Bind(R.id.trending_shows_recyclerview)
     RecyclerView mRecyclerView;
 
-    // TODO: Use dagger to inject this ?
+    // TODO: Use a dagger to inject this ?
     private TrendingShowsPresenter mTrendingShowsPresenter;
 
     public TrendingShowsFragment() {
-        mTrendingShowsPresenter = new TrendingShowsPresenter(this, new TrendingShowsManager());
+        mTrendingShowsPresenter = ((LatestTVApplication) getActivity().getApplication()).getPresenterModule().getTrendingShowsPresenter(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.trending_shows, container, false);
         ButterKnife.bind(this, view);
         return view;
