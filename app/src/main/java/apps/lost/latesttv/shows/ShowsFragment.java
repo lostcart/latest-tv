@@ -1,8 +1,8 @@
-package apps.lost.latesttv.trending;
+package apps.lost.latesttv.shows;
 
-import android.app.Fragment;
-import android.content.Context;
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,9 +14,6 @@ import java.util.List;
 
 import apps.lost.latesttv.LatestTVApplication;
 import apps.lost.latesttv.R;
-import apps.lost.latesttv.shows.Show;
-import apps.lost.latesttv.shows.ShowAdapter;
-import apps.lost.latesttv.shows.ShowItemDecoration;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -25,24 +22,27 @@ import butterknife.ButterKnife;
  *
  * @author luke
  */
-public class TrendingShowsFragment extends Fragment implements TrendingShowsPresenter.View {
+public class ShowsFragment extends Fragment implements ShowsPresenter.View {
     // How many columns should the recycler view use?
     private static final int GRID_COLUMNS = 2;
+
+    public static final String EXTRA_SHOW_TYPE = "extra_show_type";
 
     @Bind(R.id.trending_shows_recyclerview)
     RecyclerView mRecyclerView;
 
     // TODO: Use a dagger to inject this ?
-    private TrendingShowsPresenter mTrendingShowsPresenter;
+    private ShowsPresenter mShowsPresenter;
 
-    public TrendingShowsFragment() {
-        mTrendingShowsPresenter = ((LatestTVApplication) getActivity().getApplication()).getPresenterModule().getTrendingShowsPresenter(this);
+    private ShowAdapter mShowAdapter;
+
+    public ShowsFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.trending_shows, container, false);
+        View view = inflater.inflate(R.layout.shows, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -52,17 +52,23 @@ public class TrendingShowsFragment extends Fragment implements TrendingShowsPres
         // Setup recycler view settings
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), GRID_COLUMNS));
         mRecyclerView.addItemDecoration(new ShowItemDecoration(getActivity(), GRID_COLUMNS, R.dimen.spacing, true));
+        mRecyclerView.setAdapter(mShowAdapter);
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mTrendingShowsPresenter.onViewAttached();
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        Bundle bundle = getArguments();
+        int showTypeId = bundle.getInt(EXTRA_SHOW_TYPE);
+        mShowsPresenter = ((LatestTVApplication) getActivity().getApplication()).getPresenterModule()
+                .getShowsPresenter(this, ShowsManager.SHOWS_TYPE.values()[showTypeId]);
+        mShowsPresenter.onViewAttached();
+        mShowAdapter = new ShowAdapter();
     }
 
     @Override
     public void showShows(List<Show> shows) {
-        mRecyclerView.setAdapter(new ShowAdapter(shows));
+        mShowAdapter.setShows(shows);
     }
 
     @Override

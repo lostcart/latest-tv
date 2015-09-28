@@ -24,7 +24,6 @@ public class LatestTVService {
         RequestInterceptor mRequestInterceptor = new RequestInterceptor() {
             @Override
             public void intercept(RequestFacade request) {
-                //request.addHeader("Content-Type", "application/json");
                 request.addHeader("trakt-api-version", "2");
                 request.addHeader("trakt-api-key", BuildConfig.API_KEY);
             }

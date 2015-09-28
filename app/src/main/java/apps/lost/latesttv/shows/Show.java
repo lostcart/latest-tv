@@ -46,6 +46,10 @@ public class Show {
         return mShowDetails.mShowIDs.mIMDBid;
     }
 
+    public String getImageUrl() {
+        return mShowDetails.mShowImages.mPosterImages.mThumbnailImage;
+    }
+
     private class ShowDetails {
         @SerializedName("title")
         public String mTitle;
@@ -56,9 +60,22 @@ public class Show {
         @SerializedName("ids")
         public ShowIDs mShowIDs;
 
+        @SerializedName("images")
+        public ShowImages mShowImages;
+
         private class ShowIDs {
             @SerializedName("imdb")
             public String mIMDBid;
+        }
+
+        private class ShowImages {
+            @SerializedName("poster")
+            public Images mPosterImages;
+
+            private class Images {
+                @SerializedName("thumb")
+                public String mThumbnailImage;
+            }
         }
     }
 }

@@ -18,8 +18,9 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowViewHolder> {
 
     private List<Show> mShows;
 
-    public ShowAdapter(List<Show> shows) {
+    public void setShows(List<Show> shows) {
         mShows = shows;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -35,6 +36,6 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mShows.size();
+        return mShows != null ? mShows.size() : 0;
     }
 }

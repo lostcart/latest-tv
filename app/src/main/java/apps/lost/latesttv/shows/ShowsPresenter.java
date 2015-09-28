@@ -1,9 +1,6 @@
-package apps.lost.latesttv.trending;
+package apps.lost.latesttv.shows;
 
 import java.util.List;
-
-import apps.lost.latesttv.shows.Show;
-import apps.lost.latesttv.trending.service.TrendingShowsManager;
 
 /**
  * Handles firing off events to the show manager, manipulating the data returned if needed
@@ -12,19 +9,22 @@ import apps.lost.latesttv.trending.service.TrendingShowsManager;
  * <p/>
  * Created by luke
  */
-public class TrendingShowsPresenter implements TrendingShowsManager.TrendingShowsCallback {
+public class ShowsPresenter implements ShowsManager.ShowsCallback {
 
-    private TrendingShowsManager mTrendingShowsManager;
+    private ShowsManager mShowsManager;
 
     private View mView;
 
-    public TrendingShowsPresenter(View view, TrendingShowsManager trendingShowsManager) {
+    private ShowsManager.SHOWS_TYPE mSHOWSType;
+
+    public ShowsPresenter(View view, ShowsManager showsManager, ShowsManager.SHOWS_TYPE shows_type) {
         mView = view;
-        mTrendingShowsManager = trendingShowsManager;
+        mShowsManager = showsManager;
+        mSHOWSType = shows_type;
     }
 
     public void onViewAttached() {
-        mTrendingShowsManager.getShows(this);
+        mShowsManager.getShows(this, mSHOWSType);
     }
 
     @Override
