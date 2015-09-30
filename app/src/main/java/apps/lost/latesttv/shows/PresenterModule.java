@@ -1,7 +1,4 @@
-package apps.lost.latesttv;
-
-import apps.lost.latesttv.shows.ShowsManager;
-import apps.lost.latesttv.shows.ShowsPresenter;
+package apps.lost.latesttv.shows;
 
 /**
  * Module to get the show presenter
