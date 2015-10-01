@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import apps.lost.latesttv.R;
@@ -16,10 +17,10 @@ import apps.lost.latesttv.R;
  */
 public class ShowAdapter extends RecyclerView.Adapter<ShowViewHolder> {
 
-    private List<Show> mShows;
+    private List<Show> mShows = new ArrayList<>();
 
-    public void setShows(List<Show> shows) {
-        mShows = shows;
+    public void addShows(List<Show> shows) {
+        mShows.addAll(shows);
         notifyDataSetChanged();
     }
 

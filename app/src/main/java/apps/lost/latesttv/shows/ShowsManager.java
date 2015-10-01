@@ -23,7 +23,7 @@ public class ShowsManager {
     /**
      * Go grab the shows!
      */
-    public void getShows(final ShowsCallback showsCallback, SHOWS_TYPE shows_type) {
+    public void getShows(final ShowsCallback showsCallback, SHOWS_TYPE shows_type, int page, int pageSize) {
         ShowsService showsService = LatestTVService.getService(ShowsService.class);
 
         Callback<List<Show>> callback = new Callback<List<Show>>() {
@@ -40,13 +40,13 @@ public class ShowsManager {
 
         switch (shows_type) {
             case MOST_WATCHED:
-                showsService.getWatched(callback);
+                showsService.getWatched(page, pageSize,callback);
                 break;
             case TRENDING:
-                showsService.getTrending(callback);
+                showsService.getTrending(page, pageSize,callback);
                 break;
             case POPULAR:
-                showsService.getPopular(callback);
+                showsService.getPopular(page, pageSize,callback);
                 break;
         }
     }

@@ -11,11 +11,17 @@ import java.util.List;
  */
 public class ShowsPresenter implements ShowsManager.ShowsCallback {
 
+    private static final int PAGE_SIZE = 20;
+
     private ShowsManager mShowsManager;
 
     private View mView;
 
     private ShowsManager.SHOWS_TYPE mSHOWSType;
+
+    private boolean mLoadingShows;
+
+    private int mCurrentPage;
 
     public ShowsPresenter(View view, ShowsManager showsManager, ShowsManager.SHOWS_TYPE shows_type) {
         mView = view;
@@ -23,17 +29,43 @@ public class ShowsPresenter implements ShowsManager.ShowsCallback {
         mSHOWSType = shows_type;
     }
 
+    /**
+     * What should happen when the view is attached?
+     */
     public void onViewAttached() {
-        mShowsManager.getShows(this, mSHOWSType);
+        mCurrentPage = 0;
+        getItems();
+    }
+
+    /**
+     * Increase the current page count and get more items
+     */
+    public void loadMoreItems() {
+        if (!mLoadingShows) {
+            mCurrentPage++;
+            getItems();
+        }
+    }
+
+    /**
+     * Load more items if we're not already loading shows
+     */
+    private void getItems() {
+        if (!mLoadingShows) {
+            mLoadingShows = true;
+            mShowsManager.getShows(this, mSHOWSType, mCurrentPage, PAGE_SIZE);
+        }
     }
 
     @Override
     public void gotShows(List<Show> shows) {
+        mLoadingShows = false;
         mView.showShows(shows);
     }
 
     @Override
     public void failed() {
+        mLoadingShows = false;
         mView.showError();
     }
 

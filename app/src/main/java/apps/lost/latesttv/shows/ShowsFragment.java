@@ -1,6 +1,7 @@
 package apps.lost.latesttv.shows;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -24,7 +25,8 @@ import butterknife.ButterKnife;
  */
 public class ShowsFragment extends Fragment implements ShowsPresenter.View {
     // How many columns should the recycler view use?
-    private static final int GRID_COLUMNS = 2;
+    private static final int GRID_COLUMNS_PORTRAIT = 2;
+    private static final int GRID_COLUMNS_LANDSCAPE = 3;
 
     public static final String EXTRA_SHOW_TYPE = "extra_show_type";
 
@@ -35,6 +37,8 @@ public class ShowsFragment extends Fragment implements ShowsPresenter.View {
     private ShowsPresenter mShowsPresenter;
 
     private ShowAdapter mShowAdapter;
+
+    private GridLayoutManager mGridLayoutManager;
 
     public ShowsFragment() {
     }
@@ -49,10 +53,30 @@ public class ShowsFragment extends Fragment implements ShowsPresenter.View {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        // Check screen orientation
+        boolean isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        int gridColumns = isPortrait? GRID_COLUMNS_PORTRAIT : GRID_COLUMNS_LANDSCAPE;
+
         // Setup recycler view settings
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), GRID_COLUMNS));
-        mRecyclerView.addItemDecoration(new ShowItemDecoration(getActivity(), GRID_COLUMNS, R.dimen.spacing, true));
+        mGridLayoutManager = new GridLayoutManager(getActivity(), gridColumns);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
+        mRecyclerView.addItemDecoration(new ShowItemDecoration(getActivity(), gridColumns, R.dimen.spacing, true));
         mRecyclerView.setAdapter(mShowAdapter);
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int visibleItemCount = mGridLayoutManager.getChildCount();
+                int totalItemCount = mGridLayoutManager.getItemCount();
+                int firstVisibleItemPosition = mGridLayoutManager.findFirstVisibleItemPosition();
+
+                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
+                    mShowsPresenter.loadMoreItems();
+                }
+            }
+        });
     }
 
     @Override
@@ -68,11 +92,23 @@ public class ShowsFragment extends Fragment implements ShowsPresenter.View {
 
     @Override
     public void showShows(List<Show> shows) {
-        mShowAdapter.setShows(shows);
+        mShowAdapter.addShows(shows);
     }
 
     @Override
     public void showError() {
         Toast.makeText(getActivity(), R.string.trending_shows_getshows_error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(getActivity(), "landscape", Toast.LENGTH_SHORT).show();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            Toast.makeText(getActivity(), "portrait", Toast.LENGTH_SHORT).show();
+        }
     }
 }
