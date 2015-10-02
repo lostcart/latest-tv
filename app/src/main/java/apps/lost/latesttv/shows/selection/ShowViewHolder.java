@@ -52,10 +52,14 @@ public class ShowViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Post the show so we can access it from the details screen
                 EventBus.getDefault().postSticky(show);
-                v.getContext().startActivity(new Intent(v.getContext(), ShowActivity.class),
-                        ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext(), mImageView, "test")
-                                .toBundle());
+
+                // Set transition settings for opening the details screen
+                ActivityOptions options = ActivityOptions
+                        .makeSceneTransitionAnimation((Activity) v.getContext(), mImageView,
+                                v.getContext().getString(R.string.transition_show_image));
+                v.getContext().startActivity(new Intent(v.getContext(), ShowActivity.class), options.toBundle());
             }
         });
     }

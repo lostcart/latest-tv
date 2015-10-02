@@ -12,7 +12,8 @@
         <ImageView
             android:id="@+id/show_imageview_image"
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_height="200dp"
+            android:transitionName="@string/transition_show_image" />
 
         <LinearLayout
             android:layout_width="wrap_content"
