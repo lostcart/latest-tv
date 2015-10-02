@@ -35,7 +35,7 @@ public class ShowsPresenter implements ShowsManager.ShowsCallback {
      * What should happen when the view is attached?
      */
     public void onViewAttached() {
-        mCurrentPage = 0;
+        mCurrentPage = 1;
         getItems();
     }
 
