@@ -1,5 +1,8 @@
-package apps.lost.latesttv.shows;
+package apps.lost.latesttv.shows.selection;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,8 +11,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import apps.lost.latesttv.R;
+import apps.lost.latesttv.shows.Show;
+import apps.lost.latesttv.shows.details.ShowActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 
 
 /**
@@ -28,15 +34,29 @@ public class ShowViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.show_item_textview_year)
     TextView mYearTextView;
 
+    View mView;
+
     public ShowViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+
+        mView = itemView;
     }
 
-    public void setShow(Show show) {
+    public void setShow(final Show show) {
         mTitleTextView.setText(show.getTitle());
         mYearTextView.setText(show.getReleaseYear());
 
         Glide.with(mImageView.getContext()).load(show.getImageUrl()).fitCenter().into(mImageView);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().postSticky(show);
+                v.getContext().startActivity(new Intent(v.getContext(), ShowActivity.class),
+                        ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext(), mImageView, "test")
+                                .toBundle());
+            }
+        });
     }
 }

@@ -1,7 +1,8 @@
-package apps.lost.latesttv.shows;
+package apps.lost.latesttv.shows.selection;
 
 import java.util.List;
 
+import apps.lost.latesttv.shows.Show;
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Query;

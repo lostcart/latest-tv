@@ -7,8 +7,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-import apps.lost.latesttv.shows.ShowsFragment;
-import apps.lost.latesttv.shows.ShowsManager;
+import apps.lost.latesttv.shows.selection.ShowsFragment;
+import apps.lost.latesttv.shows.selection.ShowsManager;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Handles displaying the different shows fragment
@@ -18,6 +20,8 @@ import apps.lost.latesttv.shows.ShowsManager;
 public class LatestTVActivity extends AppCompatActivity {
 
     SectionsPagerAdapter mSectionsPagerAdapter;
+
+    @Bind(R.id.latest_tv_viewpager)
     ViewPager mViewPager;
 
     private int[] mPages = {R.string.title_popular, R.string.title_trending, R.string.title_most_watched};
@@ -26,11 +30,10 @@ public class LatestTVActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.latest_tv);
-
+        ButterKnife.bind(this);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.latest_tv_viewpager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 

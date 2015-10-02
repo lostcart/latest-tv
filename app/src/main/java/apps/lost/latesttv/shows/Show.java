@@ -63,6 +63,18 @@ public class Show {
         @SerializedName("images")
         public ShowImages mShowImages;
 
+        @SerializedName("overview")
+        public String mOverview;
+
+        @SerializedName("certification")
+        public String mCertification;
+
+        @SerializedName("rating")
+        public float mRating;
+
+        @SerializedName("runtime")
+        public int mRunTime;
+
         private class ShowIDs {
             @SerializedName("imdb")
             public String mIMDBid;

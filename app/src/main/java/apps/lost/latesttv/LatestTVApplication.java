@@ -2,7 +2,7 @@ package apps.lost.latesttv;
 
 import android.app.Application;
 
-import apps.lost.latesttv.shows.PresenterModule;
+import apps.lost.latesttv.shows.selection.PresenterModule;
 
 /**
  * Created by luke

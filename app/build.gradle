@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "apps.lost.latesttv"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -35,6 +35,9 @@ dependencies {
 
     /* Network */
     compile 'com.squareup.retrofit:retrofit:1.9.0'
+
+    /* Events */
+    compile 'de.greenrobot:eventbus:2.4.0'
 
     /* View injection */
     compile 'com.jakewharton:butterknife:7.0.1'

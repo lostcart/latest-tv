@@ -1,4 +1,4 @@
-package apps.lost.latesttv.shows;
+package apps.lost.latesttv.shows.selection;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import apps.lost.latesttv.R;
+import apps.lost.latesttv.shows.Show;
 
 /**
  * Adapter for displaying shows
@@ -26,7 +27,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowViewHolder> {
 
     @Override
     public ShowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shows_item, parent, false);
         return new ShowViewHolder(view);
     }
 

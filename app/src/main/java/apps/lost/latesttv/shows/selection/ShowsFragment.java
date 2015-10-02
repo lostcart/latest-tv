@@ -1,4 +1,4 @@
-package apps.lost.latesttv.shows;
+package apps.lost.latesttv.shows.selection;
 
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -15,6 +15,7 @@ import java.util.List;
 
 import apps.lost.latesttv.LatestTVApplication;
 import apps.lost.latesttv.R;
+import apps.lost.latesttv.shows.Show;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 

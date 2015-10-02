@@ -1,4 +1,4 @@
-package apps.lost.latesttv.shows;
+package apps.lost.latesttv.shows.selection;
 
 import android.content.Context;
 import android.graphics.Rect;
