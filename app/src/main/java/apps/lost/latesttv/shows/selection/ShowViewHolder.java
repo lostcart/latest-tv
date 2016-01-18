@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import apps.lost.latesttv.R;
 import apps.lost.latesttv.shows.Show;
@@ -47,7 +47,7 @@ public class ShowViewHolder extends RecyclerView.ViewHolder {
         mTitleTextView.setText(show.getTitle());
         mYearTextView.setText(show.getReleaseYear());
 
-        Glide.with(mImageView.getContext()).load(show.getImageUrl()).fitCenter().into(mImageView);
+        Picasso.with(mImageView.getContext()).load(show.getImageUrl()).fit().centerInside().into(mImageView);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override

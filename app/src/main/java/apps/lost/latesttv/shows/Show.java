@@ -50,6 +50,18 @@ public class Show {
         return mShowDetails.mShowImages.mPosterImages.mThumbnailImage;
     }
 
+    public String getOverview() {
+        return mShowDetails.mOverview;
+    }
+
+    public String getCertification() {
+        return mShowDetails.mCertification;
+    }
+
+    public int getRunTime() {
+        return mShowDetails.mRunTime;
+    }
+
     private class ShowDetails {
         @SerializedName("title")
         public String mTitle;

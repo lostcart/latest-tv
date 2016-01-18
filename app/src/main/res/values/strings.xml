@@ -2,9 +2,11 @@
     <string name="app_name">Latest TV</string>
     <string name="trending_shows_getshows_error">Something went wrong!</string>
 
-    <string name="action_settings">Settings</string>
-
+    <!-- Titles -->
     <string name="title_trending">Trending</string>
     <string name="title_popular">Latest</string>
     <string name="title_most_watched">Most Watched</string>
+
+    <!-- Show -->
+    <string name="show_runtime">%1$s minutes</string>
 </resources>

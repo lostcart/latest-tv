@@ -41,13 +41,13 @@ public class ShowsManager {
 
         switch (shows_type) {
             case MOST_WATCHED:
-                showsService.getWatched(page, pageSize,callback);
+                showsService.getWatched(page, pageSize, callback);
                 break;
             case TRENDING:
-                showsService.getTrending(page, pageSize,callback);
+                showsService.getTrending(page, pageSize, callback);
                 break;
             case POPULAR:
-                showsService.getPopular(page, pageSize,callback);
+                showsService.getPopular(page, pageSize, callback);
                 break;
         }
     }

@@ -11,7 +11,7 @@
 
         <ImageView
             android:id="@+id/show_item_imageview_image"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="200dp"
             android:transitionName="@string/transition_show_image" />
 
@@ -25,7 +25,7 @@
                 android:id="@+id/show_item_textview_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="2"
+                android:maxLines="3"
                 android:textColor="@android:color/primary_text_light"
                 android:textSize="16sp"
                 tools:text="Modern Family" />
