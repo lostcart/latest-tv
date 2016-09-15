@@ -13,6 +13,7 @@
             android:id="@+id/show_item_imageview_image"
             android:layout_width="150dp"
             android:layout_height="200dp"
+            android:layout_gravity="center"
             android:transitionName="@string/transition_show_image" />
 
         <LinearLayout

@@ -4,9 +4,10 @@ import java.util.List;
 
 import apps.lost.latesttv.service.LatestTVService;
 import apps.lost.latesttv.shows.Show;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subjects.PublishSubject;
 
 /**
  * Handles the logic of getting the shows and what we should do with the possible responses
@@ -14,6 +15,12 @@ import retrofit.client.Response;
  * Created by luke
  */
 public class ShowsManager {
+
+    PublishSubject<List<Show>> onGotShowsSubject;
+
+    public void setPublishSubject(PublishSubject<List<Show>> onGotShowsSubject) {
+        this.onGotShowsSubject = onGotShowsSubject;
+    }
 
     public enum SHOWS_TYPE {
         TRENDING,
@@ -24,37 +31,38 @@ public class ShowsManager {
     /**
      * Go grab the shows!
      */
-    public void getShows(final ShowsCallback showsCallback, SHOWS_TYPE shows_type, int page, int pageSize) {
+    public void getShows(SHOWS_TYPE shows_type, int page, int pageSize) {
         ShowsService showsService = LatestTVService.getService(ShowsService.class);
 
-        Callback<List<Show>> callback = new Callback<List<Show>>() {
+        Observer observer = new Observer<List<Show>>() {
             @Override
-            public void success(List<Show> shows, Response response) {
-                showsCallback.gotShows(shows);
+            public void onCompleted() {
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                showsCallback.failed();
+            public void onError(Throwable e) {
+                onGotShowsSubject.onError(null);
+            }
+
+            @Override
+            public void onNext(List<Show> shows) {
+                onGotShowsSubject.onNext(shows);
             }
         };
 
         switch (shows_type) {
             case MOST_WATCHED:
-                showsService.getWatched(page, pageSize, callback);
+                showsService.getWatched(page, pageSize).subscribeOn(Schedulers.newThread()).observeOn(
+                        AndroidSchedulers.mainThread()).subscribe(observer);
                 break;
             case TRENDING:
-                showsService.getTrending(page, pageSize, callback);
+                showsService.getTrending(page, pageSize).subscribeOn(Schedulers.newThread()).observeOn(
+                        AndroidSchedulers.mainThread()).subscribe(observer);
                 break;
             case POPULAR:
-                showsService.getPopular(page, pageSize, callback);
+                showsService.getPopular(page, pageSize).subscribeOn(Schedulers.newThread()).observeOn(
+                        AndroidSchedulers.mainThread()).subscribe(observer);
                 break;
         }
-    }
-
-    public interface ShowsCallback {
-        void gotShows(List<Show> shows);
-
-        void failed();
     }
 }

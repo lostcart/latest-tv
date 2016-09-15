@@ -3,6 +3,8 @@ package apps.lost.latesttv.shows.selection;
 import java.util.List;
 
 import apps.lost.latesttv.shows.Show;
+import rx.functions.Action1;
+import rx.subjects.PublishSubject;
 
 /**
  * Handles firing off events to the show manager, manipulating the data returned if needed
@@ -11,7 +13,7 @@ import apps.lost.latesttv.shows.Show;
  * <p/>
  * Created by luke
  */
-public class ShowsPresenter implements ShowsManager.ShowsCallback {
+public class ShowsPresenter {
 
     private static final int PAGE_SIZE = 20;
 
@@ -19,16 +21,29 @@ public class ShowsPresenter implements ShowsManager.ShowsCallback {
 
     private View mView;
 
-    private ShowsManager.SHOWS_TYPE mSHOWSType;
+    private ShowsManager.SHOWS_TYPE mShowsType;
 
     private boolean mLoadingShows;
 
     private int mCurrentPage;
 
-    public ShowsPresenter(View view, ShowsManager showsManager, ShowsManager.SHOWS_TYPE shows_type) {
+    public ShowsPresenter(View view, ShowsManager showsManager, PublishSubject<List<Show>> onGotShowsSubject, ShowsManager.SHOWS_TYPE showsType) {
         mView = view;
         mShowsManager = showsManager;
-        mSHOWSType = shows_type;
+        mShowsType = showsType;
+        mShowsManager.setPublishSubject(onGotShowsSubject);
+
+        onGotShowsSubject.subscribe(new Action1<List<Show>>() {
+            @Override
+            public void call(List<Show> aShows) {
+                ShowsPresenter.this.gotShows(aShows);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                ShowsPresenter.this.failed();
+            }
+        });
     }
 
     /**
@@ -55,17 +70,15 @@ public class ShowsPresenter implements ShowsManager.ShowsCallback {
     private void getItems() {
         if (!mLoadingShows) {
             mLoadingShows = true;
-            mShowsManager.getShows(this, mSHOWSType, mCurrentPage, PAGE_SIZE);
+            mShowsManager.getShows(mShowsType, mCurrentPage, PAGE_SIZE);
         }
     }
 
-    @Override
     public void gotShows(List<Show> shows) {
         mLoadingShows = false;
         mView.showShows(shows);
     }
 
-    @Override
     public void failed() {
         mLoadingShows = false;
         mView.showError();

@@ -8,21 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import apps.lost.latesttv.shows.Show;
-import apps.lost.latesttv.trending.TrendingShowsPresenter;
-import apps.lost.latesttv.trending.service.TrendingShowsManager;
+import apps.lost.latesttv.shows.selection.ShowsManager;
+import apps.lost.latesttv.shows.selection.ShowsPresenter;
 
 /**
  * Created by luke
  */
 public class TrendingShowsPresenterTests extends InstrumentationTestCase {
 
-    private TrendingShowsPresenter.View mView = Mockito.mock(TrendingShowsPresenter.View.class);
-    private TrendingShowsManager mTrendingShowsManager = Mockito.mock(TrendingShowsManager.class);
+    private ShowsPresenter.View mView = Mockito.mock(ShowsPresenter.View.class);
+    private ShowsManager mTrendingShowsManager = Mockito.mock(ShowsManager.class);
 
     public void test_gotShows_Valid_CallsShowShows() {
 
         final List<Show> shows = new ArrayList<>();
-        final TrendingShowsPresenter presenter = new TrendingShowsPresenter(mView, mTrendingShowsManager);
+        final ShowsPresenter presenter = new ShowsPresenter(mView, mTrendingShowsManager, ShowsManager.SHOWS_TYPE.MOST_WATCHED);
 
         Mockito.doAnswer(new Answer<Void>() {
             @Override
@@ -30,7 +30,7 @@ public class TrendingShowsPresenterTests extends InstrumentationTestCase {
                 presenter.gotShows(shows);
                 return null;
             }
-        }).when(mTrendingShowsManager).getShows(Mockito.any(TrendingShowsManager.TrendingShowsCallback.class));
+        }).when(mTrendingShowsManager).getShows(Mockito.any(ShowsManager.ShowsCallback.class), ShowsManager.SHOWS_TYPE.MOST_WATCHED, 0,1);
 
         presenter.onViewAttached();
 
@@ -38,7 +38,7 @@ public class TrendingShowsPresenterTests extends InstrumentationTestCase {
     }
 
     public void test_gotShows_Invalid_CallsFailed() {
-        final TrendingShowsPresenter presenter = new TrendingShowsPresenter(mView, mTrendingShowsManager);
+        final ShowsPresenter presenter = new ShowsPresenter(mView, mTrendingShowsManager, ShowsManager.SHOWS_TYPE.MOST_WATCHED);
 
         Mockito.doAnswer(new Answer<Void>() {
             @Override
@@ -46,7 +46,7 @@ public class TrendingShowsPresenterTests extends InstrumentationTestCase {
                 presenter.failed();
                 return null;
             }
-        }).when(mTrendingShowsManager).getShows(Mockito.any(TrendingShowsManager.TrendingShowsCallback.class));
+        }).when(mTrendingShowsManager).getShows(Mockito.any(ShowsManager.ShowsCallback.class), ShowsManager.SHOWS_TYPE.MOST_WATCHED, 0,1);
 
         presenter.onViewAttached();
 
